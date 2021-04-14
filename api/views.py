@@ -7,15 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import helpers
 
-# Can be removed when deploying
-import json
-
-
-# Loads the API key
-with open('tempConfig.json') as config_file:
-    config = json.load(config_file)
-    CLARIFAI_KEY = config['CLARIFAI_API_KEY']
-    MODEL_ID = config['MODEL_ID']
+import os
     
 """
 Exempting CSRF because this does not use cookies. According to this stack overflow answer:
@@ -25,6 +17,7 @@ I still use CORS to ensure the request only originates from origins that I have 
 """
 @csrf_exempt
 def keywords(request):
+
     if request.method != 'POST':
         # Method not allowed
         return JsonResponse(helpers.create_error_response(405), status=405)
@@ -40,12 +33,12 @@ def keywords(request):
     # Client setup
     channel = ClarifaiChannel.get_grpc_channel()
     stub = service_pb2_grpc.V2Stub(channel)
-    metadata = (('authorization', f'Key {CLARIFAI_KEY}'),)
+    metadata = (('authorization', f"Key {os.environ['CLARIFAI_API_KEY']}"),)
     
     
     post_model_outputs_response = stub.PostModelOutputs(
         service_pb2.PostModelOutputsRequest(
-            model_id = f"{MODEL_ID}",
+            model_id = f"{os.environ['MODEL_ID']}",
             inputs=[
                 resources_pb2.Input(
                     data=resources_pb2.Data(

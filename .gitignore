@@ -187,3 +187,6 @@ src/tempConfig.json
 
 # Webpack bundle
 *.bundle.js
+
+# Dev Setup Files
+dev_settings.py
