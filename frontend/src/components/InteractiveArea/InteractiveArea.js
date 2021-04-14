@@ -23,9 +23,6 @@ const useStyles = makeStyles({
     },
 });
 
-// TODO: Remove after deployment
-const config = require("../tempConfig.json")
-
 // Initial state of the variable tracking the response from the server
 const initResponseState = {
     data: null,
@@ -49,12 +46,10 @@ async function getKeywords(setImageSubmitted, image){
         image,
         image.name
     )
-
-    const apiLocation = config["API_LOCATION"]
     let keywords = null
 
     try {
-        keywords = await axios.post(apiLocation, formData)
+        keywords = await axios.post(process.env.API_LOCATION, formData)
         return keywords.data.data    
     } catch(err) {
         throw new Error(err)
