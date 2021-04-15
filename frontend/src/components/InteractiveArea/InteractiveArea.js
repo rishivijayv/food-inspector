@@ -49,7 +49,7 @@ async function getKeywords(setImageSubmitted, image){
     let keywords = null
 
     try {
-        keywords = await axios.post(process.env.API_LOCATION, formData)
+        keywords = await axios.post('api/keywords/', formData)
         return keywords.data.data    
     } catch(err) {
         throw new Error(err)
