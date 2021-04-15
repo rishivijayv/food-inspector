@@ -32,8 +32,8 @@ const initResponseState = {
 /**
  * Creates the POST request to the server to retrieve keywords of food image and returns the data obtained.
  * Throws an error if the request failed for any reason
- * @param {*} setImageSubmitted 
- * @param {*} image 
+ * @param {Function} setImageSubmitted 
+ * @param {Object} image 
  * @returns Keywords associated with the image. Throws an error if request failed for any reason
  */
 async function getKeywords(setImageSubmitted, image){
@@ -49,7 +49,7 @@ async function getKeywords(setImageSubmitted, image){
     let keywords = null
 
     try {
-        keywords = await axios.post(`${process.env.API_LOCATION}`, formData)
+        keywords = await axios.post("api/keywords/", formData)
         return keywords.data.data    
     } catch(err) {
         throw new Error(err)
