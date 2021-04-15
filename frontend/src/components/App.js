@@ -1,7 +1,3 @@
-// React imports
-import React from 'react';
-import { render } from 'react-dom';
-
 // My imports
 import Title from './Title/Title';
 import ShortSeparator from './ShortSeparator/ShortSeparator';
