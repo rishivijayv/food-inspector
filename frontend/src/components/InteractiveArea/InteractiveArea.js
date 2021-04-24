@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // My imports
@@ -65,7 +65,7 @@ async function getKeywords(setImageSubmitted, image){
 async function retrieveKeywords(stateSetters, state){
     let keywords = null
     try {
-        keywords = await getKeywords(stateSetters.setImageSubmitted, state.imagePreview)
+        keywords = await getKeywords(stateSetters.setImageSubmitted, state.imageFile)
         stateSetters.setResponse({
             data: keywords,
             error: null
@@ -190,19 +190,31 @@ function executeAtState(state, imageUpload, beforeSubmit, afterSubmit, afterResp
  */
 function updateImageState(stateSetters, imageUploaded, image){
     stateSetters.setImageUploaded(imageUploaded)
-    stateSetters.setImagePreview(image)
+    stateSetters.setImageFile(image)
     stateSetters.setImageSubmitted(false)
     stateSetters.setResponse(initResponseState)
 }
 
 function InteractiveArea(){
     const [imageUploaded, setImageUploaded] = useState(false)
+    const [imageFile, setImageFile] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
     const [imageSubmitted, setImageSubmitted] = useState(false)
     const [response, setResponse] = useState(initResponseState)
 
-    const state = { imageUploaded, imagePreview, imageSubmitted, response }
-    const stateSetters = { setImageUploaded, setImagePreview, setImageSubmitted, setResponse }
+    const state = { imageUploaded, imageFile, imagePreview, imageSubmitted, response }
+    const stateSetters = { setImageUploaded, setImageFile, setImagePreview, setImageSubmitted, setResponse }
+
+    useEffect(() => {
+        if(!(imageFile instanceof File)){
+            return
+        }
+
+        const objectUrl = URL.createObjectURL(imageFile)
+        setImagePreview(objectUrl)
+
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [imageFile])
 
     const classes = useStyles(imageSubmitted)
 

@@ -14,10 +14,9 @@ function ImagePreview({ image }){
 
     const classes = useStyles()
 
-    const src = image ? URL.createObjectURL(image) : null
     const alt = image ? image.name : null
 
-    return <img className={classes.imagePreview} src={src} alt={alt} />
+    return <img className={classes.imagePreview} src={image} alt={alt} />
 
 }
 
